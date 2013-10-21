@@ -1,0 +1,1 @@
+Item (ItemID [key], Name, Category, Currently, Buy_Price, First_Bid, Number_of_Bids, Bids, Location, Country, Started, Ends, Seller, Description)
