@@ -197,7 +197,9 @@ class MyParser {
         
         HashSet<String> categorySet = new HashSet<String>();
         HashSet<UserSchema> userSchemaSet = new HashSet<UserSchema>();
-        
+        SimpleDateFormat format =
+                new SimpleDateFormat("MMM-dd-yy HH:mm:ss");
+
         for (Item item : items) {
         	// Item Schema
         	ItemSchema itemSchema = new ItemSchema();
@@ -253,7 +255,17 @@ class MyParser {
             for (Bid bid : item.getBids().getBid()) {
             	BidsSchema bidSchema = new BidsSchema();
             	bidSchema.setAmount(strip(bid.getAmount()));
-            	bidSchema.setTime(bid.getTime());
+            	
+            	try {
+					Date date = format.parse(bid.getTime());
+					date.getTime();
+					SimpleDateFormat sqlFormat =
+				                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					bidSchema.setTime(sqlFormat.format(date));
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+            	
             	bidSchema.setItemId(item.getId());
             	bidSchema.setUserId(bid.getUser().getId());
                 writeSchemaToFile(bidSchema, "bids.dat");
