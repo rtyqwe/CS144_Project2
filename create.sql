@@ -36,15 +36,14 @@ CREATE TABLE Bids
 
 CREATE TABLE Category 
   ( 
-     CategoryID INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
-     Name       VARCHAR(255) 
+     Category VARCHAR(255) NOT NULL PRIMARY KEY
   ); 
 
 CREATE TABLE ItemCategory 
   ( 
      ItemID     INT NOT NULL, 
-     CategoryID INT NOT NULL, 
+     Category   VARCHAR(255) NOT NULL, 
      FOREIGN KEY (ItemID) REFERENCES Item(ItemID), 
-     FOREIGN KEY (CategoryID) REFERENCES Category(CategoryID),
-     PRIMARY KEY (ItemID, CategoryID)
+     FOREIGN KEY (Category) REFERENCES Category(Category),
+     PRIMARY KEY (ItemID, Category)
   ); 
