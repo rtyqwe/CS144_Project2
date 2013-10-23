@@ -27,10 +27,11 @@ WHERE  (SELECT ItemID
 
 -- Find the number of sellers whose rating is higher than 1000.
 SELECT Count(*) 
-FROM   User 
-       INNER JOIN Item 
-               ON Item.UserID = User.UserID
-WHERE  Rating > 1000; 
+FROM   (SELECT DISTINCT User.UserID 
+        FROM   User, 
+               Item 
+        WHERE  User.Rating > 1000 
+               AND User.UserID = Item.UserID) AS count; 
 
 -- Find the number of users who are both sellers and bidders.
 SELECT Count(*) 
@@ -39,4 +40,10 @@ FROM   Item
                ON Item.UserID = Bids.UserID;
 
 -- Find the number of categories that include at least one item with a bid of more than $100.
-select count(*) from (select ItemID from ItemCategory where ItemCategory.ItemID in (select distinct ItemID from Bids where Amount > 100.00) group by Category) as count;
+SELECT Count(*) 
+FROM   (SELECT ItemID 
+        FROM   ItemCategory 
+        WHERE  ItemCategory.ItemID IN (SELECT DISTINCT ItemID 
+                                       FROM   Bids 
+                                       WHERE  Amount > 100.00) 
+        GROUP  BY Category) AS count; 
