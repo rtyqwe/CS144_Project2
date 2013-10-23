@@ -43,8 +43,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
 import org.xml.sax.ErrorHandler;
 
-import com.sun.xml.internal.bind.v2.schemagen.xmlschema.SchemaTop;
-
 import edu.ucla.cs.cs144.Schemas.*;
 
 
