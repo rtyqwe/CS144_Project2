@@ -1,6 +1,6 @@
 CREATE TABLE User 
   ( 
-     UserID   INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
+     UserID   VARCHAR(255) NOT NULL PRIMARY KEY, 
      Rating   INT, 
      Location VARCHAR(255), 
      Country  VARCHAR(255)
@@ -11,7 +11,7 @@ CREATE TABLE Item
      ItemID      INT NOT NULL PRIMARY KEY AUTO_INCREMENT, 
      Name        VARCHAR(255), 
      Description VARCHAR(4000), 
-     UserID      INT NOT NULL, 
+     UserID      VARCHAR(255) NOT NULL, 
      Started     TIMESTAMP NULL, 
      Ended       TIMESTAMP NULL
   ); 
@@ -29,7 +29,7 @@ CREATE TABLE Bids
   ( 
      ItemID INT NOT NULL, 
      Amount DECIMAL(8, 2) NOT NULL, 
-     UserID INT, 
+     UserID VARCHAR(255) NOT NULL, 
      Time   TIMESTAMP NULL, 
      PRIMARY KEY(ItemID, Amount) 
   ); 
