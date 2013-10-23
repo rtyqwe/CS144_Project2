@@ -1,13 +1,5 @@
 1. List your relations.
 
-Item (ItemID [KEY], Name, Category, Currently, Buy_Price, First_Bid, Number_of_Bids, Bids, Started, Ends, Seller (User), Description)
-
-Category (CategoryID [KEY], Name)
-
-User (UserID [KEY], Rating, Location, Country)
-
-
-
 User (UserID [KEY], Rating, Location, Country)
 
 Item (ItemID [KEY], Name, Description, UserID, Started, Ends)
