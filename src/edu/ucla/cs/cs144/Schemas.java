@@ -184,7 +184,7 @@ public class Schemas {
 		
 		@Override
 		public String toString() {
-			return itemId + ", " + categoryId;
+			return itemId + ",\t" + categoryId;
 		}
     }
     
@@ -245,8 +245,8 @@ public class Schemas {
 
 		@Override
 		public String toString() {
-			return itemId + ", " + amount
-					+ ", " + userId + ", " + time;
+			return itemId + ",\t" + amount
+					+ ",\t" + userId + ",\t" + time;
 		}
     }
     
@@ -296,9 +296,9 @@ public class Schemas {
 
 		@Override
 		public String toString() {
-			return itemId + ", "
-					+ firstBid + ", " + currently + ", "
-					+ numberOfBids + ", " + buyPrice;
+			return itemId + ",\t"
+					+ firstBid + ",\t" + currently + ",\t"
+					+ numberOfBids + ",\t" + buyPrice;
 		}
     	
     }
@@ -357,9 +357,9 @@ public class Schemas {
 
 		@Override
 		public String toString() {
-			return itemId + ", " + '"'+  name + '"' + ", " 
-					+ '"' + description + '"' + ", " + userId
-					+ ", " + started + ", " + ended;
+			return itemId + ",\t" + '"'+  name + '"' + ",\t" 
+					+ '"' + description + '"' + ",\t" + userId
+					+ ",\t" + started + ",\t" + ended;
 		}
     	
     }
@@ -402,8 +402,8 @@ public class Schemas {
 
 		@Override
 		public String toString() {
-			return userId + ", " + rating
-					+ ", " + '"' + location + '"' +  ", " + '"' + country + '"';
+			return '"' + userId + '"' + ",\t" + '"' + rating + '"'
+					+ ",\t" + '"' + location + '"' +  ",\t" + '"' + country + '"';
 		}
     	
     }
