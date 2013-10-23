@@ -232,7 +232,7 @@ class MyParser {
             	userSchema.setLocation(bid.getUser().getLocation());
             	userSchema.setRating(bid.getUser().getRating());
             	userSchema.setUserId(bid.getUser().getId());
-            	userSchemaSet.add(sellerSchema);
+            	userSchemaSet.add(userSchema);
             }
 
             // Item Category Schema

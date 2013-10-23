@@ -8,6 +8,6 @@ ItemBids (ItemID [KEY], First_Bid, Currently, Number_of_Bids, Buy_Price)
 
 Bids (ItemID [KEY], Amount [KEY], UserID, Time)
 
-Category (CategoryID [KEY], Name)
+Category (Category [KEY])
 
-ItemCateogry (ItemID [FOREIGN], CategoryID [FOREIGN])
+ItemCateogry (ItemID [FOREIGN], Category [FOREIGN])
