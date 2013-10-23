@@ -212,8 +212,8 @@ class MyParser {
             // Item Bids Schema
             ItemBidsSchema itemBidsSchema = new ItemBidsSchema();
             itemBidsSchema.setBuyPrice(item.getBuyPrice());
-            itemBidsSchema.setCurrently(item.getCurrently());
-            itemBidsSchema.setFirstBid(item.getFirstBid());
+            itemBidsSchema.setCurrently(strip(item.getCurrently()));
+            itemBidsSchema.setFirstBid(strip(item.getFirstBid()));
             itemBidsSchema.setItemId(item.getId());
             itemBidsSchema.setNumberOfBids(item.getNumberOfBids());
             writeSchemaToFile(itemBidsSchema, "itemBids.dat");
@@ -252,7 +252,7 @@ class MyParser {
             // Bids Table
             for (Bid bid : item.getBids().getBid()) {
             	BidsSchema bidSchema = new BidsSchema();
-            	bidSchema.setAmount(bid.getAmount());
+            	bidSchema.setAmount(strip(bid.getAmount()));
             	bidSchema.setTime(bid.getTime());
             	bidSchema.setItemId(item.getId());
             	bidSchema.setUserId(bid.getUser().getId());
