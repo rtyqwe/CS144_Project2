@@ -164,6 +164,21 @@ class MyParser {
         }
     }
     
+    static String convertToTimestamp(String time) {
+    	SimpleDateFormat format = null;
+    	SimpleDateFormat sqlFormat = null;
+    	Date date = null;
+    	try {
+            format = new SimpleDateFormat("MMM-dd-yy HH:mm:ss");
+			date = format.parse(time);
+			date.getTime();
+			sqlFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return sqlFormat.format(date);
+    }
+    
     /* Process one items-???.xml file.
      */
     static void processFile(File xmlFile) {
@@ -197,17 +212,18 @@ class MyParser {
         
         HashSet<String> categorySet = new HashSet<String>();
         HashSet<UserSchema> userSchemaSet = new HashSet<UserSchema>();
-        SimpleDateFormat format =
-                new SimpleDateFormat("MMM-dd-yy HH:mm:ss");
+
+
+        
 
         for (Item item : items) {
         	// Item Schema
         	ItemSchema itemSchema = new ItemSchema();
             itemSchema.setDescription(item.getDescription());
-            itemSchema.setEnded(item.getEnds());
+            itemSchema.setEnded(convertToTimestamp(item.getEnds()));
             itemSchema.setItemId(item.getId());
             itemSchema.setName(item.getName());
-            itemSchema.setStarted(item.getStarted());
+            itemSchema.setStarted(convertToTimestamp(item.getStarted()));
             itemSchema.setUserId(item.getSeller().getId());
             writeSchemaToFile(itemSchema, "item.dat");
             
@@ -255,17 +271,7 @@ class MyParser {
             for (Bid bid : item.getBids().getBid()) {
             	BidsSchema bidSchema = new BidsSchema();
             	bidSchema.setAmount(strip(bid.getAmount()));
-            	
-            	try {
-					Date date = format.parse(bid.getTime());
-					date.getTime();
-					SimpleDateFormat sqlFormat =
-				                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					bidSchema.setTime(sqlFormat.format(date));
-				} catch (ParseException e) {
-					e.printStackTrace();
-				}
-            	
+            	bidSchema.setTime(convertToTimestamp(bid.getTime()));
             	bidSchema.setItemId(item.getId());
             	bidSchema.setUserId(bid.getUser().getId());
                 writeSchemaToFile(bidSchema, "bids.dat");
