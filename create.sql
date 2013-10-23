@@ -12,8 +12,8 @@ CREATE TABLE Item
      Name        VARCHAR(255), 
      Description VARCHAR(4000), 
      UserID      INT NOT NULL, 
-     Started     TIMESTAMP DEFAULT NULL, 
-     Ended       TIMESTAMP DEFAULT NULL
+     Started     TIMESTAMP NULL, 
+     Ended       TIMESTAMP NULL
   ); 
 
 CREATE TABLE ItemBids 
@@ -30,7 +30,7 @@ CREATE TABLE Bids
      ItemID INT NOT NULL, 
      Amount DECIMAL(8, 2) NOT NULL, 
      UserID INT, 
-     Time   TIMESTAMP DEFAULT NULL, 
+     Time   TIMESTAMP NULL, 
      PRIMARY KEY(ItemID, Amount) 
   ); 
 
@@ -42,10 +42,9 @@ CREATE TABLE Category
 
 CREATE TABLE ItemCategory 
   ( 
-     ItemID     INT NOT NULL AUTO_INCREMENT, 
-     CategoryID INT NOT NULL AUTO_INCREMENT, 
-     INDEX (ItemID), 
-     INDEX (CategoryID), 
+     ItemID     INT NOT NULL, 
+     CategoryID INT NOT NULL, 
      FOREIGN KEY (ItemID) REFERENCES Item(ItemID), 
-     FOREIGN KEY (CategoryID) REFERENCES Category(CategoryID) 
+     FOREIGN KEY (CategoryID) REFERENCES Category(CategoryID),
+     PRIMARY KEY (ItemID, CategoryID)
   ); 
