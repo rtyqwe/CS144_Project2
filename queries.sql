@@ -1,5 +1,5 @@
 -- Find the number of users in the database.
-SELECT Count(UserID) 
+SELECT Count(*) 
 FROM   User; 
 
 -- Find the number of sellers from "New York", (i.e., sellers whose location is exactly the string "New York"). Pay special attention to case sensitivity. You should match the sellers from "New York" but not from "new york".
@@ -11,9 +11,10 @@ WHERE  BINARY User.Location = 'New York';
 
 -- Find the number of auctions belonging to exactly four categories.
 SELECT Count(*) 
-FROM   ItemCategory 
-GROUP  BY ItemID 
-HAVING (Count(ItemID) = 4);
+FROM   (SELECT ItemID 
+        FROM   ItemCategory 
+        GROUP  BY ItemID 
+        HAVING( Count(ItemID) = 4 )) AS count; 
 
 -- Find the ID(s) of current (unsold) auction(s) with the highest bid.
 SELECT ItemID 
@@ -38,8 +39,4 @@ FROM   Item
                ON Item.UserID = Bids.UserID;
 
 -- Find the number of categories that include at least one item with a bid of more than $100.
-SELECT Count(*) 
-FROM   ItemCategory 
-WHERE  ItemCategory.ItemID = (SELECT DISTINCT ItemID 
-                              FROM   Bids 
-                              WHERE  Amount > 100); 
+select count(*) from (select ItemID from ItemCategory where ItemCategory.ItemID in (select distinct ItemID from Bids where Amount > 100.00) group by Category) as count;
