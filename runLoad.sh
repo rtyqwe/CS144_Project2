@@ -12,12 +12,20 @@ ant
 ant run-all
 
 # If the Java code does not handle duplicate removal, do this now
-sort -u User.csv -o User.csv
-sort -u Item.csv -o Item.csv
-sort -u ItemBids.csv -o ItemBids.csv
-sort -u Bids.csv -o Bids.csv
-sort -u Category.csv -o Category.csv
-sort -u ItemCategory.csv -o ItemCategory.csv
+sort -u user.dat -o user.dat
+sort -u item.dat -o item.dat
+sort -u itemBids.dat -o itemBids.dat
+sort -u bids.dat -o bids.dat
+sort -u category.dat -o category.dat
+sort -u itemCategory.dat -o itemCategory.dat
 
 # Run the load.sql batch file to load the data
 mysql CS144 < load.sql
+
+# Remove .dat files to prevent appending
+rm user.dat
+rm item.dat
+rm itemBids.dat
+rm bids.dat
+rm category.dat
+rm itemCategory.dat
