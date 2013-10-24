@@ -13,7 +13,8 @@ CREATE TABLE Item
      Description VARCHAR(4000), 
      UserID      VARCHAR(255) NOT NULL, 
      Started     TIMESTAMP NULL, 
-     Ended       TIMESTAMP NULL
+     Ended       TIMESTAMP NULL,
+     INDEX (UserID)
   ); 
 
 CREATE TABLE ItemBids 
@@ -31,7 +32,8 @@ CREATE TABLE Bids
      Amount DECIMAL(8, 2) NOT NULL, 
      UserID VARCHAR(255) NOT NULL, 
      Time   TIMESTAMP NULL, 
-     PRIMARY KEY(ItemID, Amount) 
+     PRIMARY KEY(ItemID, Amount),
+     INDEX (UserID)
   ); 
 
 CREATE TABLE Category 
