@@ -17,13 +17,13 @@ FROM   (SELECT ItemID
         HAVING( Count(ItemID) = 4 )) AS count; 
 
 -- Find the ID(s) of current (unsold) auction(s) with the highest bid.
-SELECT ItemID 
-FROM   Item 
-WHERE  (SELECT DISTINCT ItemID 
-        FROM   ItemBids 
-        WHERE  Currently = (SELECT Max(Currently) 
-                            FROM   ItemBids)) 
-       AND Ended > '2001-12-20 00:00:01'; 
+SELECT ItemBids.ItemID 
+FROM   ItemBids 
+WHERE  ItemBids.ItemID IN (SELECT Item.ItemID 
+                           FROM   Item 
+                           WHERE  Item.Ended > '2001-12-20 00:00:01') 
+ORDER  BY ItemBids.Currently DESC 
+LIMIT  1; 
 
 -- Find the number of sellers whose rating is higher than 1000.
 SELECT Count(DISTINCT User.UserID) 
