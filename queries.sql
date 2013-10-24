@@ -39,8 +39,8 @@ FROM   Item
          ON Item.UserID = Bids.UserID; 
 
 -- Find the number of categories that include at least one item with a bid of more than $100.
-SELECT Count(1) 
-FROM   (SELECT ItemID 
+SELECT Count(1)
+FROM  (SELECT  ItemID 
         FROM   ItemCategory 
         WHERE  ItemCategory.ItemID IN (SELECT DISTINCT ItemID 
                                        FROM   Bids 
