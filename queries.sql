@@ -3,7 +3,7 @@ SELECT Count(1)
 FROM   User; 
 
 -- Find the number of sellers from "New York", (i.e., sellers whose location is exactly the string "New York"). Pay special attention to case sensitivity. You should match the sellers from "New York" but not from "new york".
-SELECT Count(DISTINCT User.UserID) 
+SELECT Count(distinct User.UserID) 
 FROM   User 
        INNER JOIN Item 
                ON Item.UserID = User.UserID 
@@ -17,13 +17,14 @@ FROM   (SELECT ItemID
         HAVING( Count(ItemID) = 4 )) AS count; 
 
 -- Find the ID(s) of current (unsold) auction(s) with the highest bid.
-SELECT ItemBids.ItemID 
-FROM   ItemBids 
-WHERE  ItemBids.ItemID IN (SELECT Item.ItemID 
-                           FROM   Item 
-                           WHERE  Item.Ended > '2001-12-20 00:00:01') 
-ORDER  BY ItemBids.Currently DESC 
-LIMIT  1; 
+SELECT ItemID 
+FROM   Item 
+WHERE  ItemID = (SELECT ItemID 
+                 FROM   ItemBids 
+                 WHERE  Number_of_Bids > 0 
+                 ORDER  BY Currently DESC 
+                 LIMIT  1) 
+       AND Ended > '2001-12-20 00:00:01';  
 
 -- Find the number of sellers whose rating is higher than 1000.
 SELECT Count(DISTINCT User.UserID) 
