@@ -171,7 +171,6 @@ class MyParser {
     	try {
             format = new SimpleDateFormat("MMM-dd-yy HH:mm:ss");
 			date = format.parse(time);
-			date.getTime();
 			sqlFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		} catch (ParseException e) {
 			e.printStackTrace();
@@ -280,7 +279,6 @@ class MyParser {
         for (String category : categorySet) {
         	categorySchema.setCategoryId(category);
             writeSchemaToFile(categorySchema, "category.dat");
-
         }
         
         for (UserSchema userSchema : userSchemaSet) {
@@ -343,14 +341,13 @@ class MyParser {
     			Bid bid = new Bid();
     			User bidUser = new User();
     			Element bidder = getElementByTagNameNR(bidEle, "Bidder");
-    			if (bidder != null) {
-        			// Bidder
-        			bidUser.setId(bidder.getAttribute("UserID"));
-        			bidUser.setRating(bidder.getAttribute("Rating"));
-        			bidUser.setCountry(getElementTextByTagNameNR((Element) bidder, "Country"));
-        			bidUser.setLocation(getElementTextByTagNameNR((Element) bidder, "Location"));
+    			
+        		// Bidder
+        		bidUser.setId(bidder.getAttribute("UserID"));
+        		bidUser.setRating(bidder.getAttribute("Rating"));
+        		bidUser.setCountry(getElementTextByTagNameNR((Element) bidder, "Country"));
+        		bidUser.setLocation(getElementTextByTagNameNR((Element) bidder, "Location"));
         			
-    			}
     			bid.setUser(bidUser);
     			// Time and Amount
     			bid.setTime(convertToTimestamp(getElementTextByTagNameNR(bidEle, "Time")));

@@ -402,7 +402,7 @@ public class Schemas {
 
 		@Override
 		public String toString() {
-			return '"' + userId + '"' + ",\t" + '"' + rating + '"'
+			return userId + ",\t" + '"' + rating + '"'
 					+ ",\t" + '"' + location + '"' +  ",\t" + '"' + country + '"';
 		}
     	
