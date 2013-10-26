@@ -246,7 +246,7 @@ public class Schemas {
 		@Override
 		public String toString() {
 			return itemId + ",\t" + amount
-					+ ",\t" + userId + ",\t" + time;
+					+ ",\t" + '"' +  userId + '"' + ",\t" + time;
 		}
     }
     
@@ -358,7 +358,7 @@ public class Schemas {
 		@Override
 		public String toString() {
 			return itemId + ",\t" + '"'+  name + '"' + ",\t" 
-					+ '"' + description + '"' + ",\t" + userId
+					+ '"' + description + '"' + ",\t" + '"' + userId + '"'
 					+ ",\t" + started + ",\t" + ended;
 		}
     	
@@ -402,7 +402,7 @@ public class Schemas {
 
 		@Override
 		public String toString() {
-			return userId + ",\t" + '"' + rating + '"'
+			return '"' + userId + '"' + ",\t" + '"' + rating + '"'
 					+ ",\t" + '"' + location + '"' +  ",\t" + '"' + country + '"';
 		}
     	

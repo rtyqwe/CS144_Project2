@@ -26,6 +26,7 @@
 package edu.ucla.cs.cs144;
 
 import java.io.*;
+import java.sql.PreparedStatement;
 import java.text.*;
 import java.util.*;
 
@@ -44,7 +45,6 @@ import org.xml.sax.SAXParseException;
 import org.xml.sax.ErrorHandler;
 
 import edu.ucla.cs.cs144.Schemas.*;
-
 
 
 class MyParser {
@@ -239,16 +239,10 @@ class MyParser {
             sellerSchema.setLocation(item.getSeller().getLocation());
             sellerSchema.setRating(item.getSeller().getRating());
             sellerSchema.setUserId(item.getSeller().getId());
-            userSchemaSet.add(sellerSchema);
-            
-            for (Bid bid : item.getBids().getBid()) {
-            	UserSchema userSchema = new UserSchema();
-            	userSchema.setCountry(bid.getUser().getCountry());
-            	userSchema.setLocation(bid.getUser().getLocation());
-            	userSchema.setRating(bid.getUser().getRating());
-            	userSchema.setUserId(bid.getUser().getId());
-            	userSchemaSet.add(userSchema);
+            if (!isInSet(item.getSeller().getId(), userSchemaSet)) {
+                userSchemaSet.add(sellerSchema);
             }
+
 
             // Item Category Schema
             ItemCategorySchema itemCategorySchema = new ItemCategorySchema();
@@ -274,6 +268,21 @@ class MyParser {
             }
         }
         
+        for (Item item : items) {
+        	 for (Bid bid : item.getBids().getBid()) {
+             	UserSchema userSchema = new UserSchema();
+             	userSchema.setCountry(bid.getUser().getCountry());
+             	userSchema.setLocation(bid.getUser().getLocation());
+             	userSchema.setRating(bid.getUser().getRating());
+             	userSchema.setUserId(bid.getUser().getId());
+                if (!isInSet(bid.getUser().getId(), userSchemaSet)) {
+                	userSchemaSet.add(userSchema);
+                }
+             }
+        }
+        
+       
+        
         // Category Schema
         CategorySchema categorySchema = new CategorySchema();
         for (String category : categorySet) {
@@ -289,6 +298,48 @@ class MyParser {
         
     }
 
+    static boolean isInSet(String userId, HashSet<UserSchema> set) {
+    	for (UserSchema user : set) {
+    		if(userId.equals(user.getUserId()))
+    			return true;
+    	}
+    	return false;
+    }
+    
+    static String cleanString(String s) {
+    	/*
+    	 * \0	An ASCII NUL (0x00) character.
+\'	A single quote (Ò'Ó) character.
+\"	A double quote (Ò"Ó) character.
+\b	A backspace character.
+\n	A newline (linefeed) character.
+\r	A carriage return character.
+\t	A tab character.
+\Z	ASCII 26 (Control+Z). See note following the table.
+\\	A backslash (Ò\Ó) character.
+\%	A Ò%Ó character. See note following the table.
+\_	A Ò_Ó character. See note following the table.
+    	 */
+    	
+        String replacements[][] = new String[][ ]{
+                {"\\",  "\\\\"},
+                {"\0", "\\0"},
+                {"'", "\\'"}, 
+                {"\"",  "\\\""},
+                {"\b",  "\\b"},
+                {"\n",  "\\n"},
+                {"\r",  "\\r"},
+                {"\t",  "\\t"},
+                {"\\Z", "\\\\Z"}, 
+                {"%", "\\%"},     
+                {"_", "\\_"}
+        };
+        for (String[] c : replacements) {
+            s = s.replace(c[0], c[1]);
+        }
+        return s;
+    }
+    
     public static ArrayList<Item>  setAllSchema(Document doc) {
     	Element root = doc.getDocumentElement();
     	NodeList itemList = root.getElementsByTagName("Item");
@@ -299,7 +350,7 @@ class MyParser {
     		Item itemContainer = new Item();
     		Node item = itemList.item(i);
     		itemContainer.setId(item.getAttributes().getNamedItem("ItemID").getNodeValue());
-    		itemContainer.setName(getElementTextByTagNameNR((Element) item, "Name"));
+    		itemContainer.setName(cleanString(getElementTextByTagNameNR((Element) item, "Name")));
     		
     		ArrayList<String> categories = new ArrayList<String>();
     		Element[] categoryList = getElementsByTagNameNR((Element) item, "Category");
@@ -316,20 +367,19 @@ class MyParser {
     		itemContainer.setEnds(convertToTimestamp(getElementTextByTagNameNR((Element) item, "Ends")));
     		
     		if (getElementTextByTagNameNR((Element) item, "Description").length() >= 4000) {
-        		itemContainer.setDescription(getElementTextByTagNameNR((Element) item, "Description").substring(4000));
+        		itemContainer.setDescription(cleanString(getElementTextByTagNameNR((Element) item, "Description").substring(4000)));
     		}
     		else {
-        		itemContainer.setDescription(getElementTextByTagNameNR((Element) item, "Description"));
+        		itemContainer.setDescription(cleanString(getElementTextByTagNameNR((Element) item, "Description")));
     		}
     		
     		//Seller
     		User seller = new User();
     		Element sellerNode = getElementByTagNameNR((Element) item, "Seller");
-    		
-    		seller.setId(sellerNode.getAttribute("UserID"));
+    		seller.setId(cleanString(sellerNode.getAttribute("UserID")));
     		seller.setRating(sellerNode.getAttribute("Rating"));
-    		seller.setCountry(getElementTextByTagNameNR((Element) item, "Country"));
-    		seller.setLocation(getElementTextByTagNameNR((Element) item, "Location"));
+    		seller.setCountry(cleanString(getElementTextByTagNameNR((Element) item, "Country").trim()));
+    		seller.setLocation(cleanString(getElementTextByTagNameNR((Element) item, "Location").trim()));
     		itemContainer.setSeller(seller);
     		
     		//Bids
@@ -343,10 +393,18 @@ class MyParser {
     			Element bidder = getElementByTagNameNR(bidEle, "Bidder");
     			
         		// Bidder
-        		bidUser.setId(bidder.getAttribute("UserID"));
+        		bidUser.setId(cleanString(bidder.getAttribute("UserID")));
         		bidUser.setRating(bidder.getAttribute("Rating"));
-        		bidUser.setCountry(getElementTextByTagNameNR((Element) bidder, "Country"));
-        		bidUser.setLocation(getElementTextByTagNameNR((Element) bidder, "Location"));
+        		
+        		if(getElementTextByTagNameNR((Element) bidder, "Country").trim().isEmpty())
+        			bidUser.setCountry("\\N");
+        		else
+        			bidUser.setCountry(cleanString(getElementTextByTagNameNR((Element) bidder, "Country").trim()));
+        		
+        		if (getElementTextByTagNameNR((Element) bidder, "Location").trim().isEmpty())
+        			bidUser.setLocation("\\N");
+        		else
+        			bidUser.setLocation(cleanString(getElementTextByTagNameNR((Element) bidder, "Location").trim()));
         			
     			bid.setUser(bidUser);
     			// Time and Amount
