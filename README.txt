@@ -1,3 +1,7 @@
+Project by:
+Robert Nguyen 803879361
+Ryan Chan 503943165
+
 1. List your relations.
 
 User (UserID [KEY], Rating, Location, Country)
