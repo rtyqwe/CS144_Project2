@@ -367,7 +367,7 @@ class MyParser {
     		itemContainer.setEnds(convertToTimestamp(getElementTextByTagNameNR((Element) item, "Ends")));
     		
     		if (getElementTextByTagNameNR((Element) item, "Description").length() >= 4000) {
-        		itemContainer.setDescription(cleanString(getElementTextByTagNameNR((Element) item, "Description").substring(4000)));
+        		itemContainer.setDescription(cleanString(getElementTextByTagNameNR((Element) item, "Description").substring(0, 4000)));
     		}
     		else {
         		itemContainer.setDescription(cleanString(getElementTextByTagNameNR((Element) item, "Description")));
